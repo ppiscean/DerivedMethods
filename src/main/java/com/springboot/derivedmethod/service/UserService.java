@@ -1,5 +1,6 @@
 package com.springboot.derivedmethod.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,24 @@ public class UserService {
 		return userDao.findByLastNameOrderByCreatedDateDesc(lastName);
 	}
 	
+	public Iterable<User> findByFirstNameLike(String firstName) {
+		return userDao.findByFirstNameLike(firstName);
+	}
+	
+	
+	public List<User> findByLastNameAndAgeLessThanEqual(String lastName,int age)
+	{
+		return userDao.findByLastNameAndAgeLessThanEqual(lastName,age);
+	}
+	
+	public List<User> findByCreatedDateBetween(Date startdate,Date endDate)
+	{
+		return userDao.findByCreatedDateBetween(startdate,endDate);
+	}
+
+	public List<User> findByAgeLessThanEqual(Integer age) {
+		return userDao.findByAgeLessThanEqual(age);
+	}
 	
 	
 	
