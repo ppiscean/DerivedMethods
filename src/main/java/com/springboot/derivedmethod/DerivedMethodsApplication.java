@@ -1,7 +1,11 @@
 package com.springboot.derivedmethod;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +29,17 @@ public class DerivedMethodsApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// createUsers();
-		// getPersonByIds();
+		// getUserByIds();
 		// findByFirstName();
 		//findByFirstNameAndLastName();
 		// findByFirstNameOrLastName();
 		
-		findByLastNameOrderByCreationDateDesc();
+		//findByLastNameOrderByCreationDateDesc();
+		//findByAgeLessThanEqual();
+		//findByLastNameAndAgeLessThanEqual();
+		///findByFirstNameLike();
+		//findByCreatedDateBetween();
+		findByCreatedDateBetweenwithTime();
 	}
 
 	private void createUsers() {
@@ -68,30 +77,30 @@ public class DerivedMethodsApplication implements CommandLineRunner {
 
 	}
 
-	private void getPersonByIds() {
-		List<Integer> personList = new ArrayList<Integer>();
-		personList.add(1);
-		personList.add(2);
-		personList.add(12);
-		personList.add(5);
-		personList.add(6);
-		personList.add(20);
-		personList.add(40);
-		personList.add(11);
-		personList.add(15);
-		personList.add(3);
-		personList.add(4);
-		Iterable<User> usersList = userService.findUsers(personList);
+	private void getUserByIds() {
+		List<Integer> UserList = new ArrayList<Integer>();
+		UserList.add(1);
+		UserList.add(2);
+		UserList.add(12);
+		UserList.add(5);
+		UserList.add(6);
+		UserList.add(20);
+		UserList.add(40);
+		UserList.add(11);
+		UserList.add(15);
+		UserList.add(3);
+		UserList.add(4);
+		Iterable<User> usersList = userService.findUsers(UserList);
 		for (User user : usersList) {
-			System.out.println("Person Object" + user.toString());
+			System.out.println("User Object" + user.toString());
 
 		}
 	}
 
 	private void findByFirstName() {
-		Iterable<User> personsList = userService.findByFirstName("Ram");
-		for (User person : personsList) {
-			System.out.println("Person Object" + person.toString());
+		Iterable<User> UsersList = userService.findByFirstName("Ram");
+		for (User User : UsersList) {
+			System.out.println("User Object" + User.toString());
 
 		}
 	}
@@ -99,15 +108,15 @@ public class DerivedMethodsApplication implements CommandLineRunner {
 	private void findByFirstNameAndLastName() {
 		User userObj = userService.findByFirstNameAndLastName("Ram", "kumar");
 
-		System.out.println("Person Object" + userObj.toString());
+		System.out.println("User Object" + userObj.toString());
 
 	}
 
 	private void findByFirstNameOrLastName() {
-		Iterable<User> personsList = userService.findByFirstNameOrLastName("Sita", "kumar");
+		Iterable<User> UsersList = userService.findByFirstNameOrLastName("Sita", "kumar");
 
-		for (User person : personsList) {
-			System.out.println("Person Object" + person.toString());
+		for (User User : UsersList) {
+			System.out.println("User Object" + User.toString());
 
 		}
 
@@ -115,10 +124,105 @@ public class DerivedMethodsApplication implements CommandLineRunner {
 
 	// findByLastNameOrderByCreationDateDesc
 	private void findByLastNameOrderByCreationDateDesc() {
-		Iterable<User> personsList = userService.findByLastNameOrderByCreatedDateDesc("kumar");
+		Iterable<User> UsersList = userService.findByLastNameOrderByCreatedDateDesc("kumar");
 
-		for (User person : personsList) {
-			System.out.println("Person Object" + person.toString());
+		for (User User : UsersList) {
+			System.out.println("User Object" + User.toString());
+
+		}
+
+	}
+	
+	
+	private void findByAgeLessThanEqual() {
+		Iterable<User> UsersList = userService.findByAgeLessThanEqual(40);
+
+		for (User User : UsersList) {
+			System.out.println("User Object" + User.toString());
+
+		}
+
+	}
+
+	
+	private void findByLastNameAndAgeLessThanEqual() {
+		Iterable<User> UsersList = userService.findByLastNameAndAgeLessThanEqual("kumar",40);
+
+		for (User User : UsersList) {
+			System.out.println("User Object" + User.toString());
+
+		}
+
+	}
+	
+
+	private void findByFirstNameLike() {
+		Iterable<User> UserList = userService.findByFirstNameLike("%Kiran%");
+
+		for (User User : UserList) {
+			System.out.println(User.toString());
+		}
+	}
+
+	
+
+	
+
+	
+	private Date getDatewithTime(String dateString) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		try {
+			return format.parse(dateString);
+		} catch (ParseException pe) {
+			throw new RuntimeException(pe);
+		}
+	}
+	private Date getDate(String dateString) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+		try {
+			return format.parse(dateString);
+		} catch (ParseException pe) {
+			throw new RuntimeException(pe);
+		}
+	}
+
+	private Date getDate(String dateString, int add) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+		try {
+			Date current = format.parse(dateString);
+
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(current);
+			cal.add(Calendar.DATE, add);
+
+			return cal.getTime();
+		} catch (ParseException pe) {
+			throw new RuntimeException(pe);
+		}
+	}
+
+	private void findByCreatedDateBetweenwithTime() {
+		//2020-07-09 19:18:40.271000
+		Iterable<User> UsersList = userService.findByCreatedDateBetween(getDatewithTime("2020-07-09 19:18:00"), getDatewithTime("2020-07-09 19:18:41"));
+
+		for (User User : UsersList) {
+			System.out.println("User Object" + User.toString());
+
+		}
+
+	}
+	
+	
+	
+
+	private void findByCreatedDateBetween() {
+		Iterable<User> UsersList = userService.findByCreatedDateBetween(getDate("2020-05-10"), getDate("2020-07-10"));
+
+		for (User User : UsersList) {
+			System.out.println("User Object" + User.toString());
 
 		}
 
